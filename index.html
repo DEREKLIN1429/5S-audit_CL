@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5S_audit CL (上膠5S稽核)</title>
+    <title>5S-audit CL (上膠5S稽核)</title>
     <style>
         :root {
             --primary-color: #007bff;
@@ -20,6 +20,8 @@
             display: flex; justify-content: center; min-height: 100vh;
         }
 
+        /* 移除 #login-screen 相關 CSS */
+        
         #status-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;
@@ -40,6 +42,9 @@
             border-radius: 5px; margin-top: 15px; cursor: pointer; display: none; font-size: 16px;
         }
 
+        /* 移除 #screenshot-modal 相關 CSS */
+
+        /* 移除 #app-screen 上的 display: none; */
         #app-screen { width: 100%; max-width: 500px; overflow-y: auto; padding: 20px; box-sizing: border-box; }
         
         .author-header {
@@ -144,16 +149,18 @@
         .anim-purple { animation: flash-purple 1s infinite; }
         .anim-green { animation: flash-green 2s infinite; }
 
+        /* --- 語音/複製按鈕區塊 START --- */
+
         /* 語音與複製按鈕容器：兩欄佈局 */
         .voice-copy-controls { 
             margin-top: 10px; 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
+            grid-template-columns: repeat(2, 1fr); /* 兩個按鈕平均分配空間 */
             gap: 15px; 
             align-items: flex-start;
         } 
         
-        /* 新增：語言選擇/計時器容器，並排 */
+        /* 語言選擇/計時器容器，並排 */
         .lang-timer-container {
             grid-column: 1 / 3; /* 跨越兩欄 */
             display: flex;
@@ -179,7 +186,7 @@
             font-weight: bold;
         }
 
-        /* --- 語音按鈕樣式：正方形 (第一欄) --- */
+        /* 語音按鈕樣式：正方形 (第一欄) */
         .voice-btn-wrapper {
             grid-column: 1 / 2; 
             width: 100%; 
@@ -199,7 +206,7 @@
 
         .btn-voice.recording { background-color: var(--danger-color); animation: pulse 1s infinite; }
         
-        /* --- 複製文字按鈕樣式：正方形 (第二欄) --- */
+        /* 複製文字按鈕樣式：正方形 (第二欄) */
         .copy-btn-wrapper {
             grid-column: 2 / 3; 
             width: 100%; 
@@ -220,10 +227,13 @@
             line-height: 1.2;
         }
         
+        /* --- 語音/複製按鈕區塊 END --- */
+
+
         /* --- 底部按鈕群組修改 --- */
         .footer-btns-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); 
+            grid-template-columns: repeat(2, 1fr); /* 2個按鈕排一排 */
             gap: 15px;
             margin-top: 20px;
             padding-bottom: 30px;
@@ -234,33 +244,34 @@
             padding: 15px; 
             border: none; 
             border-radius: 15px; 
-            font-size: 18px; 
+            font-size: 18px; /* 字體加大 */
             font-weight: bold; 
             cursor: pointer; 
             color: white; 
             display: flex;
             align-items: center;
             justify-content: center;
+            aspect-ratio: 1/1; /* 設為正方形 (Save & View Excel) */
             line-height: 1.2;
             flex-direction: column; 
             text-align: center;
-            aspect-ratio: 1/1; /* Save and View Excel 保持正方形 */
         }
         
-        /* 縮減「檢視雲端照片」按鈕高度 (約 50% 高度) */
+        /* 檢視雲端照片按鈕 (高度縮減 50%) */
         .btn-drive.btn-full-width {
-            grid-column: 1 / -1; 
-            aspect-ratio: 4 / 1; /* 調整為長方形，縮減高度 */
+            grid-column: 1 / -1; /* 跨越兩欄 */
+            aspect-ratio: 4 / 1; /* 縮減高度為寬度的 1/4 (視覺上約 50% 縮減) */
             flex-direction: row; /* 適合長條形，文字水平排版 */
             gap: 15px;
             font-size: 18px;
+            padding: 15px;
         }
         
         .btn-save { background-color: var(--primary-color); }
         .btn-view { background-color: #6c757d; }
         .btn-drive { background-color: var(--drive-color); }
 
-        /* --- 設定彈窗 --- */
+        /* --- 設定彈窗 (移除密碼設定區塊) --- */
         #settings-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
@@ -292,7 +303,6 @@
         </div>
     </div>
 
-
     <div id="app-screen">
         <div class="author-header">Author: DERER LIN</div>
 
@@ -305,12 +315,17 @@
         </div>
 
         <div class="card">
-            <span class="section-title">0. Defect Worker ID (指摘工號/人員)</span>
+            <span class="section-title">0. User ID (使用者 ID) - Auto Saved</span>
+            <input type="text" id="userIdInput" class="modal-input" placeholder="Enter Your ID (請輸入您的ID)">
+        </div>
+
+        <div class="card">
+            <span class="section-title">1. Defect Worker ID (指摘工號/人員)</span>
             <input type="text" id="workerIdInput" class="modal-input" placeholder="Enter Worker ID (請輸入工號)">
         </div>
 
         <div class="card">
-            <span class="section-title">1. Photo (圖片紀錄)</span>
+            <span class="section-title">2. Photo (圖片紀錄)</span>
             <div class="photo-controls">
                 <button class="btn-half btn-cam" onclick="triggerCam()">📷 Camera (拍照)</button>
                 <button class="btn-half btn-gallery" onclick="triggerGallery()">🖼️ Gallery (相簿)</button>
@@ -327,7 +342,7 @@
         </div>
 
         <div class="card" id="note-card">
-            <span class="section-title">2. Note (文字/語音)</span>
+            <span class="section-title">3. Note (文字/語音)</span>
             <textarea id="noteInput" placeholder="After taking a photo, type here or use voice... (拍照後，在此輸入或使用語音)"></textarea>
             
             <div class="voice-copy-controls">
@@ -362,7 +377,7 @@
 
             </div>
 
-        </div>
+            </div>
 
         <div class="footer-btns-grid">
             <button class="btn-main btn-save" id="saveBtn" onclick="saveToCloud()">
@@ -426,6 +441,7 @@
 
 <script>
     // ================= 初始化 & FIXED PATHS =================
+    // 移除 DEFAULT_PASS, checkLogin, logout 及其所有相關邏輯
     
     const FIXED_SCRIPT_ID = "AKfycbwQTn-1Ij8Kkgvsr8d2VEmeRrDxFaVhL6-pkqdKZV_t7C5oGUiZemgt4FvutCJNgIMlBA/exec";
     const FIXED_SHEET_ID = "1doCsGmaNJta_ONKjNN-d9WR4_z6gUyBbDmm6hsbONdM/edit?gid=0#gid=0"; 
@@ -443,11 +459,16 @@
     let snapshotText = ""; 
 
     window.onload = function() {
+        // 移除登入檢查，直接顯示 App
         showApp();
         loadSettingsToUI();
+        // 載入儲存的 User ID
+        const savedUserId = localStorage.getItem("cfg_userId") || "";
+        document.getElementById('userIdInput').value = savedUserId;
     };
 
     function showApp() {
+        // 移除 document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app-screen').style.display = 'block';
         applySettings(); 
     }
@@ -474,6 +495,7 @@
     }
 
     function saveSettings() {
+        // 移除密碼相關操作
         const timeout = document.getElementById('set-timeout').value;
         const warning = document.getElementById('set-warning').value;
         const lang = document.getElementById('set-lang').value; 
@@ -492,6 +514,7 @@
     }
 
     function loadSettingsToUI() {
+        // 移除密碼相關操作
         document.getElementById('set-timeout').value = localStorage.getItem("cfg_timeout") || "10";
         document.getElementById('set-warning').value = localStorage.getItem("cfg_warning") || "3";
         const savedLang = localStorage.getItem("cfg_lang") || "cmn-Hant-TW";
@@ -583,7 +606,7 @@
         }
     }
 
-    // ================= 語音功能 (不變) =================
+    // ================= 語音功能 (調整按鈕文字) =================
     function toggleVoice() {
         if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
             alert("Browser not supported"); return;
@@ -606,7 +629,7 @@
         isRecording = true;
         isManualStop = false; 
         document.getElementById('voiceBtn').classList.add('recording');
-        document.getElementById('voiceBtn').innerHTML = "🛑<br>Stop"; 
+        document.getElementById('voiceBtn').innerHTML = "🛑<br>Stop"; // 配合正方形按鈕
         
         snapshotText = document.getElementById('noteInput').value;
         if(snapshotText.length > 0 && !snapshotText.endsWith(" ")) {
@@ -710,7 +733,7 @@
         if(punctuationTimer) clearTimeout(punctuationTimer);
         
         document.getElementById('voiceBtn').classList.remove('recording');
-        document.getElementById('voiceBtn').innerHTML = "🎤<br>Start Voice<br>(開始錄音)"; 
+        document.getElementById('voiceBtn').innerHTML = "🎤<br>Start Voice<br>(開始錄音)"; // 配合正方形按鈕
         
         const noteInput = document.getElementById('noteInput');
         noteInput.classList.remove('anim-red', 'anim-purple', 'anim-green');
@@ -719,7 +742,10 @@
         document.getElementById('display-timeout').innerText = originalTime;
     }
 
-    // ================= 複製功能 (不變) =================
+    // ================= 複製/截圖功能 (修改) =================
+
+    // 移除 closeScreenshotModal()
+    // 移除 captureScreenArea()
     
     function copyNote() {
         const note = document.getElementById('noteInput').value;
@@ -763,12 +789,18 @@
     function saveToCloud() {
         const note = document.getElementById('noteInput').value;
         const workerId = document.getElementById('workerIdInput').value; 
+        const userId = document.getElementById('userIdInput').value; // 取得 User ID
         
+        // 儲存 User ID 到 LocalStorage
+        if(userId) {
+            localStorage.setItem("cfg_userId", userId);
+        }
+
         const folderId = FIXED_FOLDER_ID;
         const scriptUrl = `https://script.google.com/macros/s/${FIXED_SCRIPT_ID}/exec`;
 
-        if(!processedImageBase64 && !note && !workerId) {
-            alert("Empty! Please take a photo, write a note, or enter Worker ID."); return;
+        if(!processedImageBase64 && !note && !workerId && !userId) {
+            alert("Empty! Please take a photo, write a note, or enter ID."); return;
         }
 
         const btn = document.getElementById('saveBtn');
@@ -779,7 +811,8 @@
             note: note, 
             image: processedImageBase64, 
             folderId: folderId,
-            workerId: workerId 
+            workerId: workerId,
+            userId: userId // 傳送 User ID
         };
 
         fetch(scriptUrl, {
@@ -791,6 +824,7 @@
             showStatus('success', 'Upload Success!', '上傳成功！');
             document.getElementById('noteInput').value = "";
             document.getElementById('workerIdInput').value = ""; 
+            // 注意：不清除 User ID
             processedImageBase64 = "";
             document.getElementById('preview-img').style.display = 'none';
             document.querySelector('.placeholder').style.display = 'block';
